@@ -4,6 +4,9 @@ import re
 import sys
 import json
 import requests
+import codecs
+
+decode_hex = codecs.getdecoder("hex_codec")
 
 if len(sys.argv) != 2:
     sys.exit("Usage: %s cracked_hashes.txt" % sys.argv[0])
@@ -21,7 +24,7 @@ else:
 if not re.match('^[0-9A-Za-z]{64}$', token):
     sys.exit('Check your token.')
 
-count  = 0
+count = 0
 founds = []
 with open(sys.argv[1], 'r') as in_file:
     for line in in_file:
@@ -29,8 +32,9 @@ with open(sys.argv[1], 'r') as in_file:
         pos = line.find('$HEX[')
         if pos > -1:
             prefix = line[:pos]
-            pw_dec = line[pos+5:-1].decode('hex')
-            line = prefix + pw_dec
+            pw_dec = decode_hex(line[pos + 5:-1])[0]
+            print(pw_dec)
+            line = prefix + pw_dec.decode()
         founds.append(line)
 
 data = {u"key": token, u"found": founds}
