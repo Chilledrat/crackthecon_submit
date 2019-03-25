@@ -38,5 +38,6 @@ with open(sys.argv[1], 'r') as in_file:
         founds.append(line)
 
 data = {u"key": token, u"found": founds}
-response = requests.post(baseurl, json.dumps(data))
-print response.content
+print(json.dumps(data, indent=4))
+# response = requests.post(baseurl, json.dumps(data))
+#print(response.content)
